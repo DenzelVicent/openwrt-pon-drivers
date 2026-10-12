@@ -494,9 +494,12 @@ int airoha_xpon_xgpon_start_rx(struct airoha_xpon *xpon)
 	u32 onu_id;
 	int ret;
 
-	pcs_mode = xpon->active_mode == AIROHA_XPON_MODE_XGSPON ?
-	                   AIROHA_PCS_PON_MODE_XGSPON :
-	                   AIROHA_PCS_PON_MODE_XGPON;
+	if (xpon->active_mode == AIROHA_XPON_MODE_XGSPON)
+		pcs_mode = AIROHA_PCS_PON_MODE_XGSPON;
+	else if (xpon->active_mode == AIROHA_XPON_MODE_GPON)
+		pcs_mode = AIROHA_PCS_PON_MODE_GPON;
+	else
+		pcs_mode = AIROHA_PCS_PON_MODE_XGPON;
 	retrain = xpon->pcs_profile_valid && xpon->pcs_profile == pcs_mode;
 	if (!retrain) {
 		ret = airoha_pcs_pon_config_rx(

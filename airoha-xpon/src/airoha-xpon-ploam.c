@@ -140,7 +140,9 @@ static int airoha_xpon_set_tcont(struct airoha_xpon *xpon, u8 index,
 {
 	u32 command;
 
-	if (index >= 32 || alloc_id > 0x3fff)
+	if (index >= 32 ||
+	    (xpon->active_mode == AIROHA_XPON_MODE_GPON && alloc_id > 0xfff) ||
+	    (xpon->active_mode != AIROHA_XPON_MODE_GPON && alloc_id > 0x3fff))
 		return -EINVAL;
 
 	command = AIROHA_XGPON_TCONT_CMD_WRITE |
@@ -967,7 +969,9 @@ static int airoha_xpon_accept_alloc_id(struct airoha_xpon *xpon,
                                        const u8 *message)
 {
 	u16 dest = get_unaligned_be16(message);
-	u16 alloc_id = (message[4] & 0x3f) << 8 | message[5];
+	u16 alloc_id = xpon->active_mode == AIROHA_XPON_MODE_GPON ?
+		       (message[4] & 0x0f) << 8 | message[5] :
+		       (message[4] & 0x3f) << 8 | message[5];
 	u8 type = message[6];
 	u8 index;
 	int ret;
