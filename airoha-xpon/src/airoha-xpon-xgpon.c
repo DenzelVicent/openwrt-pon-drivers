@@ -363,6 +363,9 @@ static int airoha_xpon_xgpon_release_digital_rx_reset(struct airoha_xpon *xpon)
 static int airoha_xpon_xgpon_enable_digital_rx(struct airoha_xpon *xpon)
 {
 	u32 rx_ctrl;
+	u32 rx_mode = xpon->active_mode == AIROHA_XPON_MODE_GPON ?
+		      AIROHA_XGPON_PHY_RX_MODE_GPON :
+		      AIROHA_XGPON_PHY_RX_MODE_XGPON;
 
 	airoha_pon_phy_write(xpon, AIROHA_XGPON_PHY_SFP_VLD_LEVEL,
 	                     xpon->frontend_link.xgpon_sfp_valid_level);
@@ -375,14 +378,12 @@ static int airoha_xpon_xgpon_enable_digital_rx(struct airoha_xpon *xpon)
 	rx_ctrl = airoha_pon_phy_read(xpon, AIROHA_XGPON_PHY_RX_SYNC_CTRL);
 	airoha_pon_phy_write(xpon, AIROHA_XGPON_PHY_RX_SYNC_CTRL,
 	                     (rx_ctrl & ~AIROHA_XGPON_PHY_RX_MODE_MASK) |
-	                             AIROHA_XGPON_PHY_RX_MODE_XGPON |
-	                             AIROHA_XGPON_PHY_RX_ENABLE);
+	                             rx_mode | AIROHA_XGPON_PHY_RX_ENABLE);
 	rx_ctrl = airoha_pon_phy_read(xpon, AIROHA_XGPON_PHY_RX_SYNC_CTRL);
 
 	return (rx_ctrl &
 	        (AIROHA_XGPON_PHY_RX_MODE_MASK | AIROHA_XGPON_PHY_RX_ENABLE)) ==
-	                       (AIROHA_XGPON_PHY_RX_MODE_XGPON |
-	                        AIROHA_XGPON_PHY_RX_ENABLE) ?
+	                       (rx_mode | AIROHA_XGPON_PHY_RX_ENABLE) ?
 	               0 :
 	               -EIO;
 }

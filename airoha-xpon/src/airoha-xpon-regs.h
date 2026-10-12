@@ -225,10 +225,12 @@
 	 AIROHA_XGPON_PHY_CONTINUE_PATTERN_MASK | \
 	 AIROHA_XGPON_PHY_CONTINUE_ALL_PRBS)
 /*
- * RX_SYNC_CTRL[10:8] selects digital RX mode 1 for XG-PON.
+ * RX_SYNC_CTRL[10:8] selects digital RX mode.
+ * Mode 1 (BIT(8)) for XG-PON/XGS-PON, mode 4 (BIT(10)) for GPON.
  */
 #define AIROHA_XGPON_PHY_RX_MODE_MASK  GENMASK(10, 8)
 #define AIROHA_XGPON_PHY_RX_MODE_XGPON BIT(8)
+#define AIROHA_XGPON_PHY_RX_MODE_GPON  BIT(10)
 /*
  * RESET_CTRL[1:0] control active-low resets for SerDes and PHY-D digital
  * logic. A 0-to-3 transition after 1 us resets the SoC receive path.
