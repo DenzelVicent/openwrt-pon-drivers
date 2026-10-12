@@ -256,6 +256,13 @@
 #define AIROHA_XGPON_ONU_ID_MASK           GENMASK(9, 0)
 #define AIROHA_XGPON_ACTIVATION_STATE_MASK GENMASK(3, 0)
 #define AIROHA_XGPON_RESPONSE_TIME_MASK    GENMASK(13, 0)
+/*
+ * RSP_TIME: ONU response delay in upstream bit-period units.
+ * XG-PON upstream is 2.488 Gbps (0x551 = 1361 periods);
+ * GPON upstream is 1.244 Gbps, roughly 2x the bit period → 0xAA2.
+ */
+#define AIROHA_XGPON_RESPONSE_TIME_XGPON   0x551
+#define AIROHA_XGPON_RESPONSE_TIME_GPON    0xAA2
 #define AIROHA_XGPON_O23_O4_SOFTWARE_REPLY BIT(0)
 
 /*

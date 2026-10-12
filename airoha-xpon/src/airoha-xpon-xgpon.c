@@ -417,7 +417,10 @@ static int airoha_xpon_xgpon_start_control(struct airoha_xpon *xpon)
 	airoha_xpon_xgpon_release_mac_interfaces(xpon);
 	airoha_xgpon_write(xpon, AIROHA_XGPON_US_PROF_VLD, 0);
 	airoha_xgpon_update_bits(xpon, AIROHA_XGPON_RSP_TIME,
-	                         AIROHA_XGPON_RESPONSE_TIME_MASK, 0x551);
+	                         AIROHA_XGPON_RESPONSE_TIME_MASK,
+	                         xpon->active_mode == AIROHA_XPON_MODE_GPON ?
+	                                 AIROHA_XGPON_RESPONSE_TIME_GPON :
+	                                 AIROHA_XGPON_RESPONSE_TIME_XGPON);
 	airoha_xgpon_update_bits(xpon, AIROHA_XGPON_O23_O4_PLOAMU_CTRL,
 	                         AIROHA_XGPON_O23_O4_SOFTWARE_REPLY, 0);
 	airoha_xgpon_update_bits(xpon, AIROHA_XGPON_DBG_CAP_SETTING,
